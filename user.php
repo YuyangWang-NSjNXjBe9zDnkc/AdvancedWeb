@@ -95,6 +95,10 @@ function Conn($sql)
       session_destroy();
 
       echo "You have been logged out";
+
+      //sends user back to homepage when logout
+      header('Location: http://localhost/advancedweb/index.php');
+      die();
     }
 
     ?>
