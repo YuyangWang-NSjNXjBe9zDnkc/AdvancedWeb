@@ -76,17 +76,19 @@ function Conn($sql)
 
   //Assigning the current timestamp as the user's
   // the latest action
-  $_SESSION['last_action'] = time();
-
-  //get values
-
-  echo "<h3>Welcome：" . $_SESSION['userName'] . "</h3>";
+  
+    $_SESSION['last_action'] = time();
+  if(isset($_SESSION['userName']))
+  {
+    echo "<h3>Welcome：" . $_SESSION['userName'] . "</h3>";
+  }
+  
   //Warning: Undefined array key "userName" in /Applications/XAMPP/xamppfiles/htdocs/movierater/index.php on line 47
   //uncatched expection when logged out/not login
 
   ?>
 
-
+  <a href="user.php">User portal</a>
 
   <?php
 
@@ -101,11 +103,8 @@ function Conn($sql)
 
   ?>
 
-
   <form method="post">
     <input type="submit" name="buttonKillSession" value="Log Out"/>
-
-
   </form>
 
 
