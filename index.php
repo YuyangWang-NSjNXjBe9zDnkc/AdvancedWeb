@@ -85,8 +85,7 @@ function Conn($sql)
       //echo "<br>";
     }
 
-    //Warning: Undefined array key "userName" in /Applications/XAMPP/xamppfiles/htdocs/movierater/index.php on line 47
-    //uncatched expection when logged out/not login
+    
 
     ?>
 
