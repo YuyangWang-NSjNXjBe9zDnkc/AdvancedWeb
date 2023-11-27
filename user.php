@@ -75,18 +75,15 @@ function Conn($sql)
     
 
     //get values
-    try
-    {
-      $_SESSION['last_action'] = time();
+    $_SESSION['last_action'] = time();
+    if (isset($_SESSION['userName'])) {
       echo "<h3>Welcome：" . $_SESSION['userName'] . "</h3>";
-    }
-    catch (Exception $e) 
-    {
-      echo "Please login to use more fucntion";
+      //echo "<a href=" . 'user.php' .">User portal</a>";
+    } else {
+      //echo "<br>";
     }
     
-    //Warning: Undefined array key "userName" in /Applications/XAMPP/xamppfiles/htdocs/movierater/index.php on line 47
-    //uncatched expection when logged out/not login
+    
     ?>
 
     <?php

@@ -43,105 +43,107 @@ function Conn($sql)
 
 <body>
   <div class='container-fluid my-5 align-content-start'>
-  <h1>Home page</h1>
+    <h1>Home page</h1>
 
-  <a href="login.php">Login</a>
-  <?php
-  //Beginning the session.
-  //https://www.w3docs.com/snippets/php/how-to-expire-a-php-session.html
-  session_start();
+    <a href="login.php">Login</a>
+    <?php
+    //Beginning the session.
+    //https://www.w3docs.com/snippets/php/how-to-expire-a-php-session.html
+    session_start();
 
-  //Expiring the session in case the user is inactive for 30
-  //minutes or more.
-  $expireAfter = 30;
+    //Expiring the session in case the user is inactive for 30
+    //minutes or more.
+    $expireAfter = 30;
 
-  //Test to make sure if our "last action" session
-  //variable was set.
-  if (isset($_SESSION['last_action'])) {
-    //Find out how many seconds have already passed
-    //since the user was active last time.
-    $secondsInactive = time() - $_SESSION['last_action'];
+    //Test to make sure if our "last action" session
+    //variable was set.
+    if (isset($_SESSION['last_action'])) {
+      //Find out how many seconds have already passed
+      //since the user was active last time.
+      $secondsInactive = time() - $_SESSION['last_action'];
 
-    //Converting the minutes into seconds.
-    $expireAfterSeconds = $expireAfter * 60;
+      //Converting the minutes into seconds.
+      $expireAfterSeconds = $expireAfter * 60;
 
-    //Test to make sure if they have not been active for too long.
-    if ($secondsInactive >= $expireAfterSeconds) {
-      // The user has not been active for too long.
-      //Killing the session.
+      //Test to make sure if they have not been active for too long.
+      if ($secondsInactive >= $expireAfterSeconds) {
+        // The user has not been active for too long.
+        //Killing the session.
+        session_unset();
+        session_destroy();
+      }
+    }
+
+    //Assigning the current timestamp as the user's
+    // the latest action
+
+    $_SESSION['last_action'] = time();
+    if (isset($_SESSION['userName'])) {
+      echo "<h3>Welcome：" . $_SESSION['userName'] . "</h3>";
+      echo "<a href=" . 'user.php' .">User portal</a>";
+    } else {
+      //echo "<br>";
+    }
+
+    //Warning: Undefined array key "userName" in /Applications/XAMPP/xamppfiles/htdocs/movierater/index.php on line 47
+    //uncatched expection when logged out/not login
+
+    ?>
+
+    
+
+    <?php
+
+    //This function log out the user by destroying the session
+
+    if (isset($_POST['buttonKillSession'])) {
       session_unset();
       session_destroy();
+
+      echo "You have been logged out";
     }
-  }
 
-  //Assigning the current timestamp as the user's
-  // the latest action
-  
-    $_SESSION['last_action'] = time();
-  if(isset($_SESSION['userName']))
-  {
-    echo "<h3>Welcome：" . $_SESSION['userName'] . "</h3>";
-  }
-  
-  //Warning: Undefined array key "userName" in /Applications/XAMPP/xamppfiles/htdocs/movierater/index.php on line 47
-  //uncatched expection when logged out/not login
+    ?>
 
-  ?>
-
-  <a href="user.php">User portal</a>
-
-  <?php
-
-  //This function log out the user by destroying the session
-
-  if (isset($_POST['buttonKillSession'])) {
-    session_unset();
-    session_destroy();
-
-    echo "You have been logged out";
-  }
-
-  ?>
-
-  <form method="post">
-    <input type="submit" name="buttonKillSession" value="Log Out"/>
-  </form>
+    <form method="post">
+      <input type="submit" name="buttonKillSession" value="Log Out" />
+    </form>
 
 
-  <?php
-  // display movie catalog with 5 random movies
-  
+    <?php
+    // display movie catalog with 5 random movies
 
 
-  //Make the sql query
-  $getMovieSql = "SELECT * FROM tb_movie ORDER BY rand()   LIMIT 5";
-  //use Conn to read data
-  $res = Conn($getMovieSql) or die(mysqli_error($conn));
 
-  if (mysqli_num_rows($res) < 1) {
-    echo "no movies avalible";
-  } else {
-    while ($row = mysqli_fetch_array($res)) {
-      $movieId = $row['movieID'];
-      $movieName = stripslashes($row['movieName']);
-      $movieDesc = $row['description'];
-      $movieGenre= stripslashes($row['genre']);
-      $movieYear = stripslashes($row['year']);
-      $movieRun  = $row['runtime'];
-      $meanRating= $row['meanRating'];
-      $nRatings  = $row['numberOfRatings'];
-      $movieCover= $row['cover'];
+    //Make the sql query
+    $getMovieSql = "SELECT * FROM tb_movie ORDER BY rand()   LIMIT 5";
+    //use Conn to read data
+    $res = Conn($getMovieSql) or die(mysqli_error($conn));
 
-      //echo "<li>$movieName</li>";
-      
-      
-      echo "<li><a href=\"movie.php?movieId=$movieId&movieName=$movieName&movieDesc=$movieDesc&movieGenre=$movieGenre&movieYear=$movieYear&movieRun=$movieRun&meanRating=$meanRating&nRatings=$nRatings&movieCover=$movieCover\">$movieName ($movieYear)</a></li>";
+    if (mysqli_num_rows($res) < 1) {
+      echo "no movies avalible";
+    } else {
+      while ($row = mysqli_fetch_array($res)) {
+        $movieId = $row['movieID'];
+        $movieName = stripslashes($row['movieName']);
+        $movieDesc = $row['description'];
+        $movieGenre = stripslashes($row['genre']);
+        $movieYear = stripslashes($row['year']);
+        $movieRun  = $row['runtime'];
+        $meanRating = $row['meanRating'];
+        $nRatings  = $row['numberOfRatings'];
+        $movieCover = $row['cover'];
+
+        //echo "<li>$movieName</li>";
+
+
+        echo "<li><a href=\"movie.php?movieId=$movieId&movieName=$movieName&movieDesc=$movieDesc&movieGenre=$movieGenre&movieYear=$movieYear&movieRun=$movieRun&meanRating=$meanRating&nRatings=$nRatings&movieCover=$movieCover\">$movieName ($movieYear)</a></li>";
+      }
     }
-  }
 
-  ?>
+    ?>
 
-</div>
+  </div>
 
 </body>
 
