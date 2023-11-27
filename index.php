@@ -77,10 +77,13 @@ function Conn($sql)
     //Assigning the current timestamp as the user's
     // the latest action
 
+    
+
     $_SESSION['last_action'] = time();
     if (isset($_SESSION['userName'])) {
       echo "<h3>Welcome：" . $_SESSION['userName'] . "</h3>";
       echo "<a href=" . 'user.php' .">User portal</a>";
+      echo "<form method=".'post'."><input type=".'submit'." name=".'buttonKillSession'." value="."Logout"." /></form>";
     } else {
       //echo "<br>";
     }
@@ -104,9 +107,7 @@ function Conn($sql)
 
     ?>
 
-    <form method="post">
-      <input type="submit" name="buttonKillSession" value="Log Out" />
-    </form>
+
 
 
     <?php
