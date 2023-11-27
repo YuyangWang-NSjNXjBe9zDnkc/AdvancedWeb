@@ -82,6 +82,7 @@ function Conn($sql)
     $_SESSION['last_action'] = time();
     if (isset($_SESSION['userName'])) {
       echo "<h3>Welcome：" . $_SESSION['userName'] . "</h3>";
+      
       echo "<a href=" . 'user.php' .">User portal</a>";
       echo "<form method=".'post'."><input type=".'submit'." name=".'buttonKillSession'." value="."Logout"." /></form>";
     } else {

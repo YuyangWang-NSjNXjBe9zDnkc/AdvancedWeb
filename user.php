@@ -14,7 +14,7 @@
 function Conn($sql)
 {
   $res = null;
-  $link = new mysqli('localhost', 'root', '', 'test1'); //change to your db accordingly // last field is database
+  $link = new mysqli('localhost', 'root', '', 'movie'); //change to your db accordingly // last field is database
   if ($link->connect_error) { // see if link sucessful
     switch ($link->connect_error) {
       case 1045:
@@ -72,18 +72,18 @@ function Conn($sql)
 
     //Assigning the current timestamp as the user's
     // the latest action
-    
+
 
     //get values
     $_SESSION['last_action'] = time();
     if (isset($_SESSION['userName'])) {
-      echo "<h3>Welcome：" . $_SESSION['userName'] . "</h3>";
+      echo "<h3>Welcome：" . $_SESSION['userName'] .  "</h3>";
       //echo "<a href=" . 'user.php' .">User portal</a>";
     } else {
       //echo "<br>";
     }
-    
-    
+
+
     ?>
 
     <?php
@@ -106,6 +106,72 @@ function Conn($sql)
     <form method="post">
       <input type="submit" name="buttonKillSession" value="Log Out" />
     </form>
+
+    <?php
+    // display Favoried movies
+    $userIDHelper = $_SESSION['id'];
+
+    echo "<h5>Favourited Movies  </h5><br>";
+
+
+
+    //Make the sql query WHERE userID = ".$_SESSION['userID']."
+    //
+    //$getMovieSql = "SELECT * FROM tb_movielist WHERE userID = 6";
+    $getMovieSql = "SELECT * FROM tb_movielist WHERE userID = '$userIDHelper'";
+    //use Conn to read data
+    $res = Conn($getMovieSql) or die(mysqli_error($conn));
+
+    if (mysqli_num_rows($res) < 1) {
+      echo "<h6>You haven't rated any movies yet.</h6>";
+    } else {
+      while ($row = mysqli_fetch_array($res)) {
+
+
+        $movieID = $row['movieID'];
+        $listID = $row['userID'];
+        $userID = $row['userID'];
+
+        $listName = stripslashes($row['listName']);
+        echo "<li>$listName</li>";
+      }
+    }
+
+    ?>
+
+    <?php
+    // display favourited movies
+
+    echo "<h5>Rated Movies</5><br>";
+
+
+
+
+    //Make the sql query WHERE userID = ".$_SESSION['userID']."
+    //
+    //$getMovieSql = "SELECT * FROM tb_ratings WHERE userID = 6";
+    $getMovieSql = "SELECT * FROM tb_ratings WHERE userID = '$userIDHelper'";
+    //use Conn to read data
+    $res = Conn($getMovieSql) or die(mysqli_error($conn));
+
+    if (mysqli_num_rows($res) < 1) {
+      echo "<H6>You haven't rated any movies yet.</h6>";
+    } else {
+      while ($row = mysqli_fetch_array($res)) {
+        $movieID = $row['movieID'];
+        $ratingID = $row['userID'];
+        $userID = $row['userID'];
+        $Stars = $row['Stars'];
+        $Review = stripslashes($row['Review']);
+
+
+        echo "<li><H6>$Review</h6></li>";
+      }
+    }
+
+    ?>
+
+    
 
 
   </div>
