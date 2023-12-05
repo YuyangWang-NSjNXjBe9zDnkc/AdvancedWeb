@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <title>User Profile</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -71,138 +71,167 @@ function getMovieLink($movieID)
 ?>
 
 <body>
-  <div>
-    <h1>User page</h1>
-    <a href="index.php">Home</a>
-    <?php
-    // Beginning the session.
-    // https://www.w3docs.com/snippets/php/how-to-expire-a-php-session.html
-    session_start();
+    <div>
+        <h1>User page</h1>
+        <a href="index.php">Home</a>
 
-// Expiring the session in case the user is inactive for 30
-// minutes or more.
-$expireAfter = 30;
+        <?php
+        // Beginning the session.
+        // https://www.w3docs.com/snippets/php/how-to-expire-a-php-session.html
+        session_start();
 
-// Test to make sure if our "last action" session
-// variable was set.
-if (isset($_SESSION['last_action'])) {
-    // Find out how many seconds have already passed
-    // since the user was active last time.
-    $secondsInactive = time() - $_SESSION['last_action'];
+        // Expiring the session in case the user is inactive for 30
+        // minutes or more.
+        $expireAfter = 30;
 
-    // Converting the minutes into seconds.
-    $expireAfterSeconds = $expireAfter * 60;
+        // Test to make sure if our "last action" session
+        // variable was set.
+        if (isset($_SESSION['last_action'])) {
+            // Find out how many seconds have already passed
+            // since the user was active last time.
+            $secondsInactive = time() - $_SESSION['last_action'];
 
-    // Test to make sure if they have not been active for too long.
-    if ($secondsInactive >= $expireAfterSeconds) {
-        // The user has not been active for too long.
-        // Killing the session.
-        session_unset();
-        session_destroy();
-    }
-}
+            // Converting the minutes into seconds.
+            $expireAfterSeconds = $expireAfter * 60;
 
-// Assigning the current timestamp as the user's
-// the latest action
+            // Test to make sure if they have not been active for too long.
+            if ($secondsInactive >= $expireAfterSeconds) {
+                // The user has not been active for too long.
+                // Killing the session.
+                session_unset();
+                session_destroy();
+            }
+        }
 
-// get values
-$_SESSION['last_action'] = time();
-if (isset($_SESSION['userName'])) {
-    echo '<h3>Welcome：'.$_SESSION['userName'].'</h3>';
-    // echo "<a href=" . 'user.php' .">User portal</a>";
-} else {
-    // echo "<br>";
-}
+        // Assigning the current timestamp as the user's
+        // the latest action
 
-?>
+        // get values
+        $_SESSION['last_action'] = time();
+        if (isset($_SESSION['userName'])) {
+            echo '<h3>Welcome：' . $_SESSION['userName'] . '</h3>';
+            // echo "<a href=" . 'user.php' .">User portal</a>";
+        } else {
+            // echo "<br>";
+        }
 
-    <?php
+        ?>
 
-// This function log out the user by destroying the session
+        <?php
 
-if (isset($_POST['buttonKillSession'])) {
-    session_unset();
-    session_destroy();
+        // This function log out the user by destroying the session
 
-    echo 'You have been logged out';
+        if (isset($_POST['buttonKillSession'])) {
+            session_unset();
+            session_destroy();
 
-    // sends user back to homepage when logout
-    header('Location: http://localhost/advancedweb/index.php');
-    exit;
-}
+            echo 'You have been logged out';
 
-?>
+            // sends user back to homepage when logout
+            header('Location: http://localhost/advancedweb/index.php');
+            exit;
+        }
 
-    <form method="post">
-      <input type="submit" name="buttonKillSession" value="Log Out" />
-    </form>
+        ?>
 
-    <?php
+        <form method="post">
+            <input type="submit" name="buttonKillSession" value="Log Out" />
+        </form>
 
-    // display Favoried movies
-$userIDHelper = $_SESSION['id'];
+        <h6>Update Password</h6>
 
-$devideString = ' - ';
+        <form method="post">
 
-echo '<h5>Favourited Movies  </h5><br>';
+            <input type="text" name="newPassword" placeholder="New password">
+            <input type="submit" name="buttonPassword" value="Submit" />
 
-// Make the sql query WHERE userID = ".$_SESSION['userID']."
-//
-// $getMovieSql = "SELECT * FROM tb_movielist WHERE userID = 6";
-$getMovieSql = "SELECT * FROM tb_movielist WHERE userID = '$userIDHelper'";
-// use Conn to read data
-$res = Conn($getMovieSql) or exit(mysqli_error($conn));
+        </form>
 
-if (mysqli_num_rows($res) < 1) {
-    echo "<h6>You haven't rated any movies yet.</h6>";
-} else {
-    while ($row = mysqli_fetch_array($res)) {
-        $movieID = $row['movieID'];
-        $listID = $row['userID'];
-        $userID = $row['userID'];
+        <?php
 
-        $listName = stripslashes($row['listName']);
+        echo '<br>';
 
-        $movieDetailLink = getMovieLink($movieID);
-        echo "<li>$movieDetailLink $devideString $listName</li>";
-    }
-}
+        // if pressed
+        if (isset($_POST['buttonPassword'])) {
 
-?>
+            $userID = $_SESSION['id'];
 
-    <?php
-// display favourited movies
+            $newPassword = $_POST['newPassword'];
 
-echo '<h5>Rated Movies</5><br>';
+            $query = "UPDATE tb_user SET pwd = '$newPassword' WHERE id = '$userID'";
+            // use Conn to make query
+            $res = Conn($query) or exit(mysqli_error($conn));
+            echo '<script>alert("Password Updated successfully")</script>';
+        }
+        ?>
 
-$devideString = ' - ';
+        <?php
 
-// Make the sql query WHERE userID = ".$_SESSION['userID']."
-//
-// $getMovieSql = "SELECT * FROM tb_ratings WHERE userID = 6";
-$getMovieSql = "SELECT * FROM tb_ratings WHERE userID = '$userIDHelper'";
-// use Conn to read data
-$res = Conn($getMovieSql) or exit(mysqli_error($conn));
+        // display Favoried movies
+        $userIDHelper = $_SESSION['id'];
 
-if (mysqli_num_rows($res) < 1) {
-    echo "<H6>You haven't rated any movies yet.</h6>";
-} else {
-    while ($row = mysqli_fetch_array($res)) {
-        $movieID = $row['movieID'];
-        $ratingID = $row['userID'];
-        $userID = $row['userID'];
-        $Stars = $row['Stars'];
-        $Review = stripslashes($row['Review']);
+        $devideString = ' - ';
 
-        $movieDetailLink = getMovieLink($movieID);
+        echo '<h5>Favourited Movies  </h5><br>';
 
-        echo "<li>$movieDetailLink $devideString $Stars  $devideString $Review </li>";
-    }
-}
+        // Make the sql query WHERE userID = ".$_SESSION['userID']."
+        //
+        // $getMovieSql = "SELECT * FROM tb_movielist WHERE userID = 6";
+        $getMovieSql = "SELECT * FROM tb_movielist WHERE userID = '$userIDHelper'";
+        // use Conn to read data
+        $res = Conn($getMovieSql) or exit(mysqli_error($conn));
 
-?>
+        if (mysqli_num_rows($res) < 1) {
+            echo "<h6>You haven't rated any movies yet.</h6>";
+        } else {
+            while ($row = mysqli_fetch_array($res)) {
+                $movieID = $row['movieID'];
+                $listID = $row['userID'];
+                $userID = $row['userID'];
 
-  </div>
+                $listName = stripslashes($row['listName']);
+
+                $movieDetailLink = getMovieLink($movieID);
+
+                echo "<li>$movieDetailLink $devideString $listName</li>";
+            }
+        }
+
+        ?>
+
+        <?php
+        // display favourited movies
+
+        echo '<h5>Rated Movies</5><br>';
+
+        $devideString = ' - ';
+
+        // Make the sql query WHERE userID = ".$_SESSION['userID']."
+        //
+        // $getMovieSql = "SELECT * FROM tb_ratings WHERE userID = 6";
+        $getMovieSql = "SELECT * FROM tb_ratings WHERE userID = '$userIDHelper'";
+        // use Conn to read data
+        $res = Conn($getMovieSql) or exit(mysqli_error($conn));
+
+        if (mysqli_num_rows($res) < 1) {
+            echo "<H6>You haven't rated any movies yet.</h6>";
+        } else {
+            while ($row = mysqli_fetch_array($res)) {
+                $movieID = $row['movieID'];
+                $ratingID = $row['userID'];
+                $userID = $row['userID'];
+                $Stars = $row['Stars'];
+                $Review = stripslashes($row['Review']);
+
+                $movieDetailLink = getMovieLink($movieID);
+
+                echo "<li>$movieDetailLink $devideString $Stars  $devideString $Review </li>";
+            }
+        }
+
+        ?>
+
+    </div>
 
 </body>
 
