@@ -12,30 +12,7 @@
 
 <?php
 
-function Conn($sql)
-{
-    $res = null;
-    $link = new mysqli('localhost', 'root', '', 'movie'); // change to your db accordingly // last field is database
-    if ($link->connect_error) { // see if link sucessful
-        switch ($link->connect_error) {
-            case 1045:
-                echo 'Connection declined, check passowrd';
-                break;
-            case 1049:
-                echo 'Check db name';
-                break;
-            default:
-                break;
-        }
-    } else {
-        $link->query('SET NAMES utf8'); // set char set
-        $res = $link->query($sql); // res is inside this function, increasing the visiblity
-    }
-
-    mysqli_close($link);
-
-    return $res;
-}
+include 'mysqlconn.php'; 
 
 function getMovieLink($movieID)
 {
@@ -66,6 +43,24 @@ function getMovieLink($movieID)
             return "<a href=\"movie.php?movieId=$movieId&movieName=$movieName&movieDesc=$movieDesc&movieGenre=$movieGenre&movieYear=$movieYear&movieRun=$movieRun&meanRating=$meanRating&nRatings=$nRatings&movieCover=$movieCover\">$movieName ($movieYear)</a>";
         }
     }
+}
+
+function deleteFav($listid){
+    
+        $id = $listid;
+        $query = "DELETE FROM `tb_movielist` WHERE listID = '$id'";
+        $res = Conn($query) or exit(mysqli_error($conn));
+        if ($res) {
+             echo '<script>alert( $id " deleted")</script>';
+             header('location:/advancedweb/user.php');
+        } else {
+             echo "Error: " . mysqli_error($conn);
+        }
+   
+}
+
+function delFav(){
+    
 }
 
 ?>
@@ -186,14 +181,16 @@ function getMovieLink($movieID)
         } else {
             while ($row = mysqli_fetch_array($res)) {
                 $movieID = $row['movieID'];
-                $listID = $row['userID'];
+                $listID = $row['listID'];
                 $userID = $row['userID'];
 
                 $listName = stripslashes($row['listName']);
 
                 $movieDetailLink = getMovieLink($movieID);
 
-                echo "<li>$movieDetailLink $devideString $listName</li>";
+                $deleteFavLink = "<a href='DeleteFav.php?favlistid=".$listID."' id='buttonDelete'>Delete</a>";
+
+                echo "<li>$movieDetailLink $devideString $listName $devideString $deleteFavLink</li>";
             }
         }
 
@@ -205,6 +202,8 @@ function getMovieLink($movieID)
         echo '<h5>Rated Movies</5><br>';
 
         $devideString = ' - ';
+
+        
 
         // Make the sql query WHERE userID = ".$_SESSION['userID']."
         //
@@ -218,14 +217,16 @@ function getMovieLink($movieID)
         } else {
             while ($row = mysqli_fetch_array($res)) {
                 $movieID = $row['movieID'];
-                $ratingID = $row['userID'];
+                $ratingID = $row['ratingID'];
                 $userID = $row['userID'];
                 $Stars = $row['Stars'];
                 $Review = stripslashes($row['Review']);
 
                 $movieDetailLink = getMovieLink($movieID);
 
-                echo "<li>$movieDetailLink $devideString $Stars  $devideString $Review </li>";
+                $deleteFavLink = "<a href='DeleteRated.php?ratingid=".$ratingID."' id='buttonDelete'>Delete</a>";                
+
+                echo "<li>$movieDetailLink $devideString $Stars  $devideString $Review $devideString $deleteFavLink</li>";
             }
         }
 

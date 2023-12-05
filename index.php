@@ -11,31 +11,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
 
 <?php
-
-function Conn($sql)
-{
-    $res = null;
-    $link = new mysqli('localhost', 'root', '', 'movie'); // change to your db accordingly
-    if ($link->connect_error) { // see if link sucessful
-        switch ($link->connect_error) {
-            case 1045:
-                echo 'Connection declined, check passowrd';
-                break;
-            case 1049:
-                echo 'Check db name';
-                break;
-            default:
-                break;
-        }
-    } else {
-        $link->query('SET NAMES utf8'); // set char set
-        $res = $link->query($sql); // res is inside this function, increasing the visiblity
-    }
-
-    mysqli_close($link);
-
-    return $res;
-}
+include 'mysqlconn.php'; 
 ?>
 
 

@@ -15,31 +15,7 @@
 
 
 <?php
-//function for querying db
-function Conn($sql)
-{
-    $res = null;
-    $link = new mysqli('localhost', 'root', '', 'movie'); //change to your db accordingly
-    if ($link->connect_error) { // see if link sucessful
-        switch ($link->connect_error) {
-            case 1045:
-                echo "Connection declined, check passowrd";
-                break;
-            case 1049:
-                echo "Check db name";
-                break;
-            default:
-                break;
-        }
-    } else {
-        $link->query("SET NAMES utf8"); //set char set
-        $res = $link->query($sql); //res is inside this function, increasing the visiblity
-    }
-
-    mysqli_close($link);
-
-    return $res;
-}
+include 'mysqlconn.php'; 
 
 //login
 if ($_POST) { //
@@ -99,10 +75,10 @@ if ($_POST) { //
             <div class="row p-5 col-md-12">
                 <form action="" method="post">
                     <span>
-                        <input type="text" name="fName" placeholder="First Name">
+                        <!-- <input type="text" name="fName" placeholder="First Name"> -->
                     </span>
                     <div class="my-2 col-md-12">
-                        <input type="text" name="lName" placeholder="Last Name">
+                        <!-- <input type="text" name="lName" placeholder="Last Name"> -->
                     </div>
                     <div class="my-2 col-md-12">
                         <input type="text" name="userName" placeholder="Username">
@@ -117,7 +93,7 @@ if ($_POST) { //
                         <input type="text" name="email" placeholder="Email Address">
                     </div>
                     <div class="my-3">
-                        <input type="date" name="dob" placeholder="Date of Birth">
+                        <!-- <input type="date" name="dob" placeholder="Date of Birth"> -->
                     </div>
                     <span class="col">
                         <span class="col">
