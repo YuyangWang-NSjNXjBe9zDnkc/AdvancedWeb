@@ -44,6 +44,7 @@ function getMovieLink($movieID)
     // Make the sql query
     $getMovieSql = "SELECT * FROM tb_movie where movieID = '$movieID'";
     // use Conn to read data
+    // ignore the 
     $res = Conn($getMovieSql) or exit(mysqli_error($Conn));
 
     if (mysqli_num_rows($res) < 1) {
