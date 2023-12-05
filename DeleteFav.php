@@ -7,7 +7,7 @@ if (isset($_GET['favlistid'])) {
      $res = Conn($query) or exit(mysqli_error($Conn));
      if ($res) {
           //echo '<script>alert( $id " deleted")</script>';
-          header('location:/advancedweb/user.php');
+          header('location:user.php');
      } else {
           echo "Error: " . mysqli_error($conn);
      }

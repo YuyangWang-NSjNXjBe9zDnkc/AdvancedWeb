@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 05, 2023 at 12:01 PM
+-- Generation Time: Dec 05, 2023 at 08:10 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -103,13 +103,6 @@ CREATE TABLE `tb_movielist` (
   `listName` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
---
--- Dumping data for table `tb_movielist`
---
-
-INSERT INTO `tb_movielist` (`movieID`, `listID`, `userID`, `listName`) VALUES
-(2, 10, 6, '23');
-
 -- --------------------------------------------------------
 
 --
@@ -206,13 +199,13 @@ ALTER TABLE `tb_movie`
 -- AUTO_INCREMENT for table `tb_movielist`
 --
 ALTER TABLE `tb_movielist`
-  MODIFY `listID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `listID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `tb_ratings`
 --
 ALTER TABLE `tb_ratings`
-  MODIFY `ratingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ratingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tb_user`
